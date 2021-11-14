@@ -64,7 +64,7 @@ const run = async () => {
             res.json({ admin: isAdmin });
         })
 
-        // post User
+        // Post User
         app.post('/users', async (req, res) => {
             const user = req.body;
             const result = await usersCollection.insertOne(user);
