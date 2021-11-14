@@ -24,6 +24,13 @@ const run = async () => {
         const imageCollection = database.collection('gallery');
         const reviewCollection = database.collection('reviews');
 
+        // Get Products
+        app.get('/products', async (req, res) => {
+            const cursor = productsCollection.find({});
+            const products = await cursor.toArray();
+            res.send(products);
+        })
+
         // Get Gallery
         app.get('/gallery', async (req, res) => {
             const cursor = imageCollection.find({});
@@ -80,6 +87,15 @@ const run = async () => {
             const filter = { email: user.email };
             const updateDoc = { $set: { role: 'admin' } };
             const result = await usersCollection.updateOne(filter, updateDoc);
+            res.json(result);
+        })
+
+        //Delete Product
+        app.delete('/products/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) }
+            const result = await productsCollection.deleteOne(query);
+            console.log('Deleting with id ', result);
             res.json(result);
         })
 
