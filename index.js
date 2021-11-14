@@ -20,7 +20,25 @@ const run = async () => {
         await client.connect();
         const database = client.db('camera_Gallery');
         const usersCollection = database.collection('users');
+        const productsCollection = database.collection('products');
+        const imageCollection = database.collection('gallery');
+        const reviewCollection = database.collection('reviews');
 
+        // Get Gallery
+        app.get('/gallery', async (req, res) => {
+            const cursor = imageCollection.find({});
+            const images = await cursor.toArray();
+            res.send(images);
+        })
+
+        // Get Reviews
+        app.get('/reviews', async (req, res) => {
+            const cursor = reviewCollection.find({});
+            const reviews = await cursor.toArray();
+            res.send(reviews);
+        })
+
+        // Get Admin
         app.get('/users/:email', async (req, res) => {
             const email = req.params.email;
             const query = { email };
@@ -32,6 +50,7 @@ const run = async () => {
             res.json({ admin: isAdmin });
         })
 
+        // post User
         app.post('/users', async (req, res) => {
             const user = req.body;
             const result = await usersCollection.insertOne(user);
@@ -39,6 +58,23 @@ const run = async () => {
             res.json(result);
         })
 
+        // Post Products
+        app.post('/products', async (req, res) => {
+            const product = req.body;
+            const result = await productsCollection.insertOne(product);
+            console.log(result);
+            res.json(result);
+        })
+
+        // Post Reviews
+        app.post('/reviews', async (req, res) => {
+            const review = req.body;
+            const result = await reviewCollection.insertOne(review);
+            console.log(result);
+            res.json(result);
+        })
+
+        // Put Admin
         app.put('/users/admin', async (req, res) => {
             const user = req.body;
             const filter = { email: user.email };
