@@ -24,6 +24,13 @@ const run = async () => {
         const imageCollection = database.collection('gallery');
         const reviewCollection = database.collection('reviews');
 
+        // Get 6 Products
+        app.get('/products6', async (req, res) => {
+            const cursor = productsCollection.find({}).limit(6);
+            const products = await cursor.toArray();
+            res.send(products);
+        })
+
         // Get Products
         app.get('/products', async (req, res) => {
             const cursor = productsCollection.find({});
@@ -61,7 +68,6 @@ const run = async () => {
         app.post('/users', async (req, res) => {
             const user = req.body;
             const result = await usersCollection.insertOne(user);
-            console.log(result);
             res.json(result);
         })
 
@@ -69,7 +75,6 @@ const run = async () => {
         app.post('/products', async (req, res) => {
             const product = req.body;
             const result = await productsCollection.insertOne(product);
-            console.log(result);
             res.json(result);
         })
 
@@ -77,7 +82,6 @@ const run = async () => {
         app.post('/reviews', async (req, res) => {
             const review = req.body;
             const result = await reviewCollection.insertOne(review);
-            console.log(result);
             res.json(result);
         })
 
